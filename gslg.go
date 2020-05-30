@@ -1,4 +1,4 @@
-package slgint
+package gslg
 
 import (
 	"context"
