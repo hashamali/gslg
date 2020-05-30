@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/hashamali/sl"
+	"github.com/hashamali/gsl"
 	"github.com/rs/zerolog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
@@ -14,7 +14,7 @@ import (
 )
 
 // Interceptor will return a new gRPC interceptor for logging.
-func Interceptor(logger sl.Log) func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+func Interceptor(logger gsl.Log) func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		start := time.Now()
 		l := new(ctx, info.FullMethod)
@@ -47,7 +47,7 @@ func (l *log) MarshalZerologObject(zle *zerolog.Event) {
 	}
 }
 
-func (l *log) send(ctx context.Context, logger sl.Log, start time.Time) {
+func (l *log) send(ctx context.Context, logger gsl.Log, start time.Time) {
 
 	l.StatusCode = int(status.Code(l.Error))
 	l.Latency = float64(time.Since(start).Nanoseconds()) / 1000000.0
