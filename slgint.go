@@ -1,4 +1,4 @@
-package slging
+package slgint
 
 import (
 	"context"
