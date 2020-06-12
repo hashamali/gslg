@@ -19,7 +19,9 @@ func Interceptor(logger gsl.Log) func(ctx context.Context, req interface{}, info
 		start := time.Now()
 		l := new(ctx, info.FullMethod)
 		defer l.send(ctx, logger, start)
-		return handler(ctx, req)
+		resp, err := handler(ctx, req)
+		l.Error = err
+		return resp, err
 	}
 }
 
@@ -48,7 +50,6 @@ func (l *log) MarshalZerologObject(zle *zerolog.Event) {
 }
 
 func (l *log) send(ctx context.Context, logger gsl.Log, start time.Time) {
-
 	l.StatusCode = int(status.Code(l.Error))
 	l.Latency = float64(time.Since(start).Nanoseconds()) / 1000000.0
 
